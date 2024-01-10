@@ -2,18 +2,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
-class MyGoogleSignIn {
-  final GoogleSignInAccount googleSignInAccount;
-  final GoogleSignInAuthentication googleSignInAuthentication;
-
-  MyGoogleSignIn({
-    required this.googleSignInAccount,
-    required this.googleSignInAuthentication,
-  });
-}
+import 'package:test_login/enums/auth_type.dart';
+import 'package:test_login/models/my_google_sign_in.dart';
 
 class LoginHelper {
+  static Future<dynamic> loginWithAuthType(AuthType authType) async {
+    switch (authType) {
+      case AuthType.google:
+        return loginWithGoogle();
+      case AuthType.apple:
+        return loginWithApple();
+      case AuthType.facebook:
+        return loginWithFacebook();
+    }
+  }
+
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId:
         '246581804720-isuq7me6r4c41b1q1b4j069rghif225b.apps.googleusercontent.com',
@@ -21,21 +24,17 @@ class LoginHelper {
 
   static Future<MyGoogleSignIn?> loginWithGoogle() async {
     try {
-      // Trigger Google Sign In
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
 
-      // Check if the sign-in process was canceled
       if (googleSignInAccount == null) {
         // Handle cancellation
         return null;
       }
 
-      // Obtain the GoogleSignInAuthentication object
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
-      // Successful login
       if (kDebugMode) {
         print("Logged in with Google successfully!");
       }
@@ -44,7 +43,6 @@ class LoginHelper {
         googleSignInAuthentication: googleSignInAuthentication,
       );
     } catch (e) {
-      // Handle errors
       if (kDebugMode) {
         print("Error during Google sign in: $e");
       }
@@ -62,13 +60,11 @@ class LoginHelper {
         ],
       );
 
-      // Successful login
       if (kDebugMode) {
         print("Logged in with Apple successfully!");
       }
       return authorizationCredentialAppleID;
     } catch (e) {
-      // Handle errors
       if (kDebugMode) {
         print("Error during Apple sign in: $e");
       }
@@ -78,31 +74,26 @@ class LoginHelper {
 
   static Future<LoginResult?> loginWithFacebook() async {
     try {
-      // Trigger Facebook Sign In
       if (kIsWeb) {
         await FacebookAuth.instance.webAndDesktopInitialize(
-            appId: '1365719610250300', //TODO get it from facebook developer portal
+            appId: '1115732526020942',
             cookie: true,
             xfbml: true,
-            version: 'v1.0'); //TODO get it from facebook developer portal
+            version: 'v18.0');
       }
+
       final LoginResult result = await FacebookAuth.instance.login();
       if (result.status == LoginStatus.success) {
-        // you are logged in
-        FacebookAuth.instance.getUserData().then((mappedJsonResult) =>
-            debugPrint(mappedJsonResult
-                .toString())); //TODO: remove debugPrint and make it into an Object to send with the result
-
+        FacebookAuth.instance.getUserData().then(
+            (mappedJsonResult) => debugPrint(mappedJsonResult.toString()));
         return result;
       } else {
-        // cancel
         if (kDebugMode) {
-          print(result);
+          print('login failed: ${result.status.name}');
         }
         return null;
       }
     } catch (e) {
-      // Handle errors
       if (kDebugMode) {
         print("Error during Facebook sign in: $e");
       }
@@ -111,7 +102,6 @@ class LoginHelper {
   }
 
   static Future<void> facebookLogOut() async {
-    // log out
     await FacebookAuth.instance.logOut();
   }
 }
