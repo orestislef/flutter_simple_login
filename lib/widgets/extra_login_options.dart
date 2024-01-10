@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_social_button/flutter_social_button.dart';
@@ -14,8 +16,10 @@ class ExtraLoginOptions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         buildSocialButton(AuthType.google, context),
-        const SizedBox(width: 10.0),
-        buildSocialButton(AuthType.apple, context),
+        Platform.isIOS ? const SizedBox(width: 10.0) : const SizedBox(),
+        Platform.isIOS
+            ? buildSocialButton(AuthType.apple, context)
+            : const SizedBox(),
         const SizedBox(width: 10.0),
         buildSocialButton(AuthType.facebook, context),
       ],
