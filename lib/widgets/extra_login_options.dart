@@ -41,15 +41,16 @@ class ExtraLoginOptions extends StatelessWidget {
     }
   }
 
-  void _onClickedLogin({required AuthType authType, required BuildContext context}) {
+  void _onClickedLogin(
+      {required AuthType authType, required BuildContext context}) {
     LoginHelper.loginWithAuthType(authType).then(
-          (result) => result != null
-          ? _onSuccessLogin(result, authType, context)
+      (result) => result != null
+          ? _onSuccessLogin(result, context)
           : _onErrorLogin(authType, context),
     );
   }
 
-  void _onSuccessLogin(dynamic result, AuthType authType, BuildContext context) {
+  void _onSuccessLogin(dynamic result, BuildContext context) {
     String displayName = result.getDisplayName() ?? "No Name";
     String accessToken = result.getAccessToken() ?? "No access token";
 
