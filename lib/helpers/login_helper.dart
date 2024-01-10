@@ -3,6 +3,8 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:test_login/enums/auth_type.dart';
+import 'package:test_login/models/facebook_response.dart';
+import 'package:test_login/models/my_facebook_sign_in.dart';
 import 'package:test_login/models/my_google_sign_in.dart';
 
 class LoginHelper {
@@ -20,7 +22,6 @@ class LoginHelper {
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId:
         '246581804720-isuq7me6r4c41b1q1b4j069rghif225b.apps.googleusercontent.com',
-
   );
 
   static Future<MyGoogleSignIn?> loginWithGoogle() async {
@@ -73,7 +74,7 @@ class LoginHelper {
     }
   }
 
-  static Future<LoginResult?> loginWithFacebook() async {
+  static Future<MyFacebookSignIn?> loginWithFacebook() async {
     try {
       if (kIsWeb) {
         await FacebookAuth.instance.webAndDesktopInitialize(
@@ -85,9 +86,12 @@ class LoginHelper {
 
       final LoginResult result = await FacebookAuth.instance.login();
       if (result.status == LoginStatus.success) {
-        FacebookAuth.instance.getUserData().then(
-            (mappedJsonResult) => debugPrint(mappedJsonResult.toString()));
-        return result;
+        Map<String, dynamic> mappedJsonResult =
+            await FacebookAuth.instance.getUserData();
+        FacebookResponse facebookResponse =
+            FacebookResponse.fromJson(mappedJsonResult);
+        return MyFacebookSignIn(
+            loginResult: result, facebookResponse: facebookResponse);
       } else {
         if (kDebugMode) {
           print('login failed: ${result.status.name}');

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:test_login/models/my_facebook_sign_in.dart';
 import 'package:test_login/models/my_google_sign_in.dart';
 
 class MyUser {
@@ -19,8 +19,9 @@ class MyUser {
       } else if (result is AuthorizationCredentialAppleID) {
         user.name = result.givenName!;
         user.token = result.authorizationCode;
-      } else if (result is LoginResult) {
-        user.token = result.accessToken!.token;
+      } else if (result is MyFacebookSignIn) {
+        user.name = result.facebookResponse.name!;
+        user.token = result.loginResult.accessToken!.token;
       }
     } catch (ignore) {
       if (kDebugMode) {

@@ -13,6 +13,7 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   flutter_facebook_auth: ^6.0.3
   flutter_social_button: ^1.1.4+1
+  universal_io: ^2.2.2
 
 dev_dependencies:
   flutter_test:
