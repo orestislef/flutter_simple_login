@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_social_button/flutter_social_button.dart';
 import 'package:test_login/enums/auth_type.dart';
 import 'package:test_login/helpers/login_helper.dart';
+import 'package:test_login/models/my_user.dart';
 
 class ExtraLoginOptions extends StatelessWidget {
   const ExtraLoginOptions({super.key});
@@ -55,8 +56,10 @@ class ExtraLoginOptions extends StatelessWidget {
   }
 
   void _onSuccessLogin(dynamic result, BuildContext context) {
-    String displayName = result.getDisplayName() ?? "No Name";
-    String accessToken = result.getAccessToken() ?? "No access token";
+    MyUser user = MyUser.createUser(result);
+
+    String displayName = user.name;
+    String accessToken = user.token;
 
     if (kDebugMode) {
       print("User $displayName logged in successfully");

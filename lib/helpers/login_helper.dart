@@ -20,6 +20,7 @@ class LoginHelper {
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId:
         '246581804720-isuq7me6r4c41b1q1b4j069rghif225b.apps.googleusercontent.com',
+
   );
 
   static Future<MyGoogleSignIn?> loginWithGoogle() async {
