@@ -15,18 +15,18 @@ class ExtraLoginOptions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        buildSocialButton(AuthType.google, context),
+        _buildSocialButton(AuthType.google, context),
         Platform.isIOS ? const SizedBox(width: 10.0) : const SizedBox(),
         Platform.isIOS
-            ? buildSocialButton(AuthType.apple, context)
+            ? _buildSocialButton(AuthType.apple, context)
             : const SizedBox(),
         const SizedBox(width: 10.0),
-        buildSocialButton(AuthType.facebook, context),
+        _buildSocialButton(AuthType.facebook, context),
       ],
     );
   }
 
-  Widget buildSocialButton(AuthType authType, BuildContext context) {
+  Widget _buildSocialButton(AuthType authType, BuildContext context) {
     return FlutterSocialButton(
       onTap: () => _onClickedLogin(authType: authType, context: context),
       mini: true,

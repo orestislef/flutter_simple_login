@@ -78,13 +78,15 @@ class LoginHelper {
     try {
       if (kIsWeb) {
         await FacebookAuth.instance.webAndDesktopInitialize(
-            appId: '1115732526020942',
+            appId: '904739884510049',
             cookie: true,
             xfbml: true,
             version: 'v18.0');
       }
 
-      final LoginResult result = await FacebookAuth.instance.login();
+      final LoginResult result = await FacebookAuth.instance.login(
+        permissions: ['public_profile', 'email'],
+      );
       if (result.status == LoginStatus.success) {
         Map<String, dynamic> mappedJsonResult =
             await FacebookAuth.instance.getUserData();
