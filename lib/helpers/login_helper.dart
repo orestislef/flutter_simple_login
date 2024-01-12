@@ -10,6 +10,8 @@ import 'package:test_login/models/my_google_sign_in.dart';
 class LoginHelper {
   static Future<dynamic> loginWithAuthType(AuthType authType) async {
     switch (authType) {
+      case AuthType.none:
+        return null;
       case AuthType.google:
         return loginWithGoogle();
       case AuthType.apple:

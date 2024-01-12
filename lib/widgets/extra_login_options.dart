@@ -1,28 +1,32 @@
-import 'package:universal_io/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_social_button/flutter_social_button.dart';
 import 'package:test_login/enums/auth_type.dart';
 import 'package:test_login/helpers/login_helper.dart';
 import 'package:test_login/models/my_user.dart';
+import 'package:universal_io/io.dart';
 
 class ExtraLoginOptions extends StatelessWidget {
-  const ExtraLoginOptions({super.key});
+  const ExtraLoginOptions({super.key, required this.successLogin});
+
+  final Function(MyUser myUser) successLogin;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildSocialButton(AuthType.google, context),
-        Platform.isIOS ? const SizedBox(width: 10.0) : const SizedBox(),
-        Platform.isIOS
-            ? _buildSocialButton(AuthType.apple, context)
-            : const SizedBox(),
-        const SizedBox(width: 10.0),
-        _buildSocialButton(AuthType.facebook, context),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildSocialButton(AuthType.google, context),
+          Platform.isIOS ? const SizedBox(width: 10.0) : const SizedBox(),
+          Platform.isIOS
+              ? _buildSocialButton(AuthType.apple, context)
+              : const SizedBox(),
+          const SizedBox(width: 10.0),
+          _buildSocialButton(AuthType.facebook, context),
+        ],
+      ),
     );
   }
 
@@ -30,12 +34,14 @@ class ExtraLoginOptions extends StatelessWidget {
     return FlutterSocialButton(
       onTap: () => _onClickedLogin(authType: authType, context: context),
       mini: true,
-      buttonType: getButtonType(authType),
+      buttonType: getButtonType(authType)!,
     );
   }
 
-  ButtonType getButtonType(AuthType authType) {
+  ButtonType? getButtonType(AuthType authType) {
     switch (authType) {
+      case AuthType.none:
+        return null;
       case AuthType.google:
         return ButtonType.google;
       case AuthType.apple:
@@ -77,6 +83,7 @@ class ExtraLoginOptions extends StatelessWidget {
         ],
       ),
     );
+    successLogin.call(user);
   }
 
   void _onErrorLogin(AuthType authType, BuildContext context) {

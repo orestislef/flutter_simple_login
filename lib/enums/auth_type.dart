@@ -1,4 +1,5 @@
 enum AuthType {
+  none,
   google,
   apple,
   facebook,
@@ -7,6 +8,8 @@ enum AuthType {
 extension AuthTypeExtension on AuthType {
   String get name {
     switch (this) {
+      case AuthType.none:
+        return "None";
       case AuthType.google:
         return "Google";
       case AuthType.apple:
